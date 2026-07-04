@@ -27,3 +27,8 @@ class LLM:
         )
 
         return response.choices[0].message.content
+
+
+llm = LLM()
+
+print(llm.ask("deepseek", "What is LLM"))

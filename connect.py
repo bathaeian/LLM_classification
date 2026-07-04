@@ -1,3 +1,5 @@
+from openai import OpenAI
+
 #https://github.com/alistaitsacle/free-llm-api-keys
 
 DEEPSEEK_KEY= "sk-6g7skI5wcNHa7INxGkACkVM28lOJJkQui2yPRNZezPOHVZIL"

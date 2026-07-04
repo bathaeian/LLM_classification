@@ -1,3 +1,4 @@
+#pip install -i https://mirror-pypi.runflare.com/simple openai
 from openai import OpenAI
 
 #https://github.com/alistaitsacle/free-llm-api-keys

@@ -31,7 +31,8 @@ def image_to_pointcloud(
 def save_pointcloud(
     points: np.ndarray,
     output_path: Path,
-    label: int,
+    label: str,
+    source_set: str,
     image_name: str,
     image_shape: tuple[int, int],
 ) -> None:
@@ -40,6 +41,7 @@ def save_pointcloud(
     """
     data = {
         "class": label,
+        "source_set": source_set,
         "image": image_name,
         "width": image_shape[1],
         "height": image_shape[0],
@@ -51,6 +53,14 @@ def save_pointcloud(
 
     with output_path.open("w") as f:
         json.dump(data, f, indent=2)
+
+
+def pair_label(image_number: int) -> str:
+    """
+    Assign one label to every two images in a set: 1/2 -> A, 3/4 -> B, etc.
+    """
+    pair_index = (image_number - 1) // 2
+    return chr(ord("A") + pair_index)
 
 
 def process_dataset(
@@ -74,17 +84,18 @@ def process_dataset(
     )
 
     for class_dir in class_dirs:
-        label = int(class_dir.name)
+        source_set = class_dir.name
 
         images = sorted(
             class_dir.glob("*.png"),
             key=lambda p: int(p.stem),
         )
 
-        print(f"Processing class {label}: {len(images)} images")
+        print(f"Processing set {source_set}: {len(images)} images")
 
         for img_path in images:
             img_array = np.array(Image.open(img_path).convert("L"))
+            label = pair_label(int(img_path.stem))
 
             points = image_to_pointcloud(
                 img_array,
@@ -93,12 +104,13 @@ def process_dataset(
                 thin_edges=thin_edges,
             )
 
-            output_path = output_dir / str(label) / f"{img_path.stem}.json"
+            output_path = output_dir / source_set / f"{img_path.stem}.json"
 
             save_pointcloud(
                 points=points,
                 output_path=output_path,
                 label=label,
+                source_set=source_set,
                 image_name=img_path.name,
                 image_shape=img_array.shape,
             )

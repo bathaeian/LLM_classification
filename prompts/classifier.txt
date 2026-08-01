@@ -1,0 +1,23 @@
+You are a machine learning researcher.
+
+Analyze the following labeled dataset.
+
+Each sample represents one handwritten character.
+
+Each sample contains:
+- image width
+- image height
+- the coordinates of all black pixels
+- the class label
+
+Your tasks are:
+
+1. Propose an interpretable classifier.
+2. Explain the decision rules.
+3. Perform 5-fold cross validation.
+4. Report the accuracy.
+5. Do not use Python code.
+
+Dataset:
+
+{{DATASET}}

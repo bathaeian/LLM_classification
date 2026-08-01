@@ -9,7 +9,8 @@
   },
   "samples": [
     {
-      "class": 0,
+      "class": "B",
+      "source_set": "0",
       "image": "4.png",
       "width": 105,
       "height": 105,
@@ -1090,7 +1091,8 @@
       ]
     },
     {
-      "class": 0,
+      "class": "A",
+      "source_set": "0",
       "image": "1.png",
       "width": 105,
       "height": 105,
@@ -2967,7 +2969,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "E",
+      "source_set": "1",
       "image": "9.png",
       "width": 105,
       "height": 105,
@@ -4292,7 +4295,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "D",
+      "source_set": "1",
       "image": "8.png",
       "width": 105,
       "height": 105,

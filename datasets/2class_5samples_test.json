@@ -9,7 +9,8 @@
   },
   "samples": [
     {
-      "class": 0,
+      "class": "B",
+      "source_set": "0",
       "image": "4.png",
       "width": 105,
       "height": 105,
@@ -1090,7 +1091,8 @@
       ]
     },
     {
-      "class": 0,
+      "class": "A",
+      "source_set": "0",
       "image": "1.png",
       "width": 105,
       "height": 105,
@@ -2967,7 +2969,8 @@
       ]
     },
     {
-      "class": 0,
+      "class": "E",
+      "source_set": "0",
       "image": "9.png",
       "width": 105,
       "height": 105,
@@ -4376,7 +4379,8 @@
       ]
     },
     {
-      "class": 0,
+      "class": "D",
+      "source_set": "0",
       "image": "8.png",
       "width": 105,
       "height": 105,
@@ -5685,7 +5689,8 @@
       ]
     },
     {
-      "class": 0,
+      "class": "I",
+      "source_set": "0",
       "image": "17.png",
       "width": 105,
       "height": 105,
@@ -6906,7 +6911,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "C",
+      "source_set": "1",
       "image": "5.png",
       "width": 105,
       "height": 105,
@@ -7911,7 +7917,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "B",
+      "source_set": "1",
       "image": "4.png",
       "width": 105,
       "height": 105,
@@ -9040,7 +9047,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "I",
+      "source_set": "1",
       "image": "18.png",
       "width": 105,
       "height": 105,
@@ -9957,7 +9965,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "B",
+      "source_set": "1",
       "image": "3.png",
       "width": 105,
       "height": 105,
@@ -11214,7 +11223,8 @@
       ]
     },
     {
-      "class": 1,
+      "class": "G",
+      "source_set": "1",
       "image": "14.png",
       "width": 105,
       "height": 105,

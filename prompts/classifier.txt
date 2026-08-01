@@ -1,6 +1,6 @@
 You are a machine learning researcher.
 
-Analyze the following labeled dataset.
+Analyze the following labeled training dataset.
 
 Each sample represents one handwritten character.
 
@@ -14,10 +14,14 @@ Your tasks are:
 
 1. Propose an interpretable classifier.
 2. Explain the decision rules.
-3. Perform 5-fold cross validation.
-4. Report the accuracy.
+3. Apply the classifier to the held-out test dataset.
+4. Report the test predictions and test accuracy if labels are provided.
 5. Do not use Python code.
 
-Dataset:
+Training dataset:
 
 {{DATASET}}
+
+Test dataset:
+
+{{TEST_DATASET}}

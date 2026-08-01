@@ -34,8 +34,11 @@ def format_dataset(dataset: dict) -> str:
     return "\n".join(lines)
 
 
-def build_prompt(template: str, dataset_text: str) -> str:
-    return template.replace("{{DATASET}}", dataset_text)
+def build_prompt(template: str, dataset_text: str, test_dataset_text: str = "") -> str:
+    return (
+        template.replace("{{DATASET}}", dataset_text)
+        .replace("{{TEST_DATASET}}", test_dataset_text)
+    )
 
 
 def main():
@@ -43,6 +46,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--dataset", required=True)
+    parser.add_argument("--test-dataset")
     parser.add_argument("--template", required=True)
     parser.add_argument("--output", required=True)
 
@@ -54,7 +58,13 @@ def main():
 
     dataset_text = format_dataset(dataset)
 
-    prompt = build_prompt(template, dataset_text)
+    test_dataset_text = ""
+
+    if args.test_dataset:
+        test_dataset = load_dataset(Path(args.test_dataset))
+        test_dataset_text = format_dataset(test_dataset)
+
+    prompt = build_prompt(template, dataset_text, test_dataset_text)
 
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)

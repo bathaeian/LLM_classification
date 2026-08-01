@@ -2,6 +2,8 @@ import os
 import argparse
 import requests
 from dotenv import load_dotenv
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 def main():
@@ -28,12 +30,30 @@ def main():
     with open(args.prompt, "r") as f:
         prompt = f.read()
 
-    response = requests.post(
+    session = requests.Session()
+    session.mount(
+        "https://",
+        HTTPAdapter(
+            max_retries=Retry(
+                total=3,
+                backoff_factor=2,
+                status_forcelist=[429, 500, 502, 503, 504],
+                allowed_methods=["POST"],
+            )
+        ),
+    )
+
+    response = session.post(
         url="https://openrouter.ai/api/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com",
+            "X-Title": "LLM Classification",
+            "User-Agent": "LLM-Classification/1.0",
         },
         json={"model": args.model, "messages": [{"role": "user", "content": prompt}]},
+        timeout=120,
     )
 
     response_json = response.json()

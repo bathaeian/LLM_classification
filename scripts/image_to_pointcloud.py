@@ -4,15 +4,27 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from skimage import feature, morphology
 
 
-def image_to_pointcloud(img_array: np.ndarray, threshold: int = 127) -> np.ndarray:
+def image_to_pointcloud(
+    img_array: np.ndarray,
+    threshold: int = 127,
+    canny_sigma: float = 1.0,
+    thin_edges: bool = True,
+) -> np.ndarray:
     """
-    Convert a grayscale image into an Nx2 point cloud.
-    Each point represents the (x, y) coordinate of a dark pixel.
+    Convert a grayscale image into an Nx2 point cloud using Canny edges.
+    Each point represents the (x, y) coordinate of an edge pixel.
     """
     mask = img_array < threshold
-    y, x = np.nonzero(mask)
+
+    edges = feature.canny(mask.astype(float), sigma=canny_sigma)
+
+    if thin_edges:
+        edges = morphology.thin(edges)
+
+    y, x = np.nonzero(edges)
     return np.column_stack((x, y))
 
 
@@ -41,7 +53,13 @@ def save_pointcloud(
         json.dump(data, f, indent=2)
 
 
-def process_dataset(input_dir: str, output_dir: str, threshold: int) -> None:
+def process_dataset(
+    input_dir: str,
+    output_dir: str,
+    threshold: int,
+    canny_sigma: float,
+    thin_edges: bool,
+) -> None:
     """
     Convert every PNG image in the dataset into a point cloud.
     """
@@ -71,6 +89,8 @@ def process_dataset(input_dir: str, output_dir: str, threshold: int) -> None:
             points = image_to_pointcloud(
                 img_array,
                 threshold=threshold,
+                canny_sigma=canny_sigma,
+                thin_edges=thin_edges,
             )
 
             output_path = output_dir / str(label) / f"{img_path.stem}.json"
@@ -112,12 +132,27 @@ def main() -> None:
         help="Pixel threshold used for binarization (default: 127).",
     )
 
+    parser.add_argument(
+        "--canny-sigma",
+        type=float,
+        default=1.0,
+        help="Gaussian sigma used by the Canny filter (default: 1.0).",
+    )
+
+    parser.add_argument(
+        "--no-thin",
+        action="store_true",
+        help="Disable thinning after Canny edge detection.",
+    )
+
     args = parser.parse_args()
 
     process_dataset(
         input_dir=args.input,
         output_dir=args.output,
         threshold=args.threshold,
+        canny_sigma=args.canny_sigma,
+        thin_edges=not args.no_thin,
     )
 
 

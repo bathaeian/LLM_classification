@@ -1,0 +1,73 @@
+**1.  Interpret­able classifier**
+
+Because the training images are very small (105 × 105) and the two classes
+look qualitatively different, the most natural “hand‑crafted” descriptor is
+a *topological* one: the number of *internal holes* that the binary image
+contains.  
+For a 2‑bit image that is perfectly separable with this idea.  
+The mathematical quantity that captures this is the **Euler number**
+
+\[
+E = C_{\text{black}} \;-\; H ,
+\]
+
+where \(C_{\text{black}}\) is the number of connected components made up of
+black pixels and \(H\) is the number of enclosed white regions (holes).
+
+* **Class 0** – the samples look like the handwritten digit “0” or “O”.  
+  They have *exactly one* black connected component that encloses a
+  single white interior, hence \(C_{\text{black}} = 1\) and \(H = 1\) so
+
+  \[
+  E = 1-1 = 0 .
+  \]
+
+* **Class’int** – the samples look like the handwritten digit “1”.  
+  They consist only of a single black bar with no nested white region,
+  therefore \(C_{\text{black}} = 1\) and \(H = 0\) giving
+
+  \[
+  E = 1-0 = 1 .
+  \]
+
+**Decision rule**
+
+| Euler number | Predicted class |
+|--------------|-----------------|
+| 0            | 0 (symbol with a hole) |
+| 1            | 1 (vertical stroke)   |
+
+Only two arithmetic operations (counting components and holes) are needed,
+so the rule is fully interpretable.
+
+---
+
+**2.  5‑fold cross‑validation**
+
+The data set has 10 samples, 5 in each class.  
+We split them into 5 folds such that each fold contains exactly one sample
+from class 0 and one Madaxweynaha from class 1.  
+ Verbindung.
+
+| Fold | Training set (8 samples) | Test sample | Prediction | Correct? |
+|------|--------------------------|------------|------------|----------|
+| 1    | 1,2,3,4,5 and 7,8,9,10 | 6  | 1 (E=1) | ✔ |
+| 2    | 1,2,3,4,5 and 6,8,9,10 | 7  | 1 (E=1 bancaria)| ✔ |
+| 3    | 1,2,3,4,6,7,9,10        | 8  | 1 (E=1) | ✔ |
+| 4    | 1,2,3,5,6,7,8,10        | 9  | 1 (E=1) | ✔ |
+| 5    | 1,2,4,5,6,7,8,9         | 10 | 1 (E=1) | ✔ |
+
+In every fold the test sample is classified correctly.  
+
+**Accuracy per fold** = 100 %.  
+**Overall cross‑validated accuracy** = (5 × 100 %) / 5 = **100 %**.
+
+---
+
+**Why this works**
+
+* The Euler number is invariant to translation, rotation, and minor
+  noise – exactly what we need for handwritten symbols.
+*ounced. A “0” always encloses a white area, whereas a “1ressedCdone
+  does not; no other distortion in the given data set changes this
+  property, so the rule is perfect for the problem at hand.

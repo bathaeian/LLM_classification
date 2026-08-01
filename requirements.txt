@@ -1,0 +1,5 @@
+numpy
+Pillow
+python-dotenv
+requests
+scikit-image

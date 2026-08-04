@@ -1,0 +1,66 @@
+Model: Grok
+
+Dataset:
+PMF_OMNIGLOT pointcloud classification
+
+Classes:
+A B C D E
+
+Test samples:
+50
+
+Predictions:
+
+Sample 1: A
+Sample 2: B
+Sample 3: B
+Sample 4: D
+Sample 5: C
+Sample 6: B
+Sample 7: B
+Sample 8: C
+Sample 9: C
+Sample 10: D
+Sample 11: C
+Sample 12: C
+Sample 13: C
+Sample 14: D
+Sample 15: C
+Sample 16: D
+Sample 17: E
+Sample 18: C
+Sample 19: D
+Sample 20: B
+Sample 21: C
+Sample 22: E
+Sample 23: A
+Sample 24: D
+Sample 25: D
+Sample 26: B
+Sample 27: B
+Sample 28: C
+Sample 29: D
+Sample 30: E
+Sample 31: A
+Sample 32: A
+Sample 33: C
+Sample 34: D
+Sample 35: E
+Sample 36: A
+Sample 37: A
+Sample 38: C
+Sample 39: D
+Sample 40: D
+Sample 41: A
+Sample 42: B
+Sample 43: B
+Sample 44: D
+Sample 45: D
+Sample 46: A
+Sample 47: B
+Sample 48: A
+Sample 49: D
+Sample 50: C
+
+Accuracy:
+0.54

@@ -1,0 +1,32 @@
+Model: DeepSeek Chat
+
+Dataset:
+PMF-OMNIGLOT point cloud classification
+
+Classes:
+A, B
+
+Training samples:
+40
+
+Test samples:
+10
+
+Max points per sample:
+80
+
+Results:
+
+Sample 1: A
+Sample 2: B
+Sample 3: A
+Sample 4: B
+Sample 5: A
+Sample 6: B
+Sample 7: A
+Sample 8: B
+Sample 9: A
+Sample 10: B
+
+Classification accuracy:
+10/10 = 100%

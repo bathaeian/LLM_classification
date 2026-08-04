@@ -1,22 +1,23 @@
-You are a machine learning researcher.
+You are an expert in handwritten character recognition.
 
-Analyze the following labeled training dataset.
-
-Each sample represents one handwritten character.
+You are given a labeled training dataset of handwritten characters represented as point clouds.
 
 Each sample contains:
 - image width
 - image height
-- the coordinates of all black pixels
-- the class label
+- coordinates of black pixels
+- class label
 
-Your tasks are:
+Your task is to classify the test samples.
 
-1. Propose an interpretable classifier.
-2. Explain the decision rules.
-3. Apply the classifier to the held-out test dataset.
-4. Report the test predictions and test accuracy if labels are provided.
-5. Do not use Python code.
+Rules:
+- Compare test samples only with the given training samples.
+- Use geometric similarity of point arrangements.
+- Focus on shape structure, position, and stroke patterns.
+- Do not use external knowledge about characters.
+- Do not describe machine learning algorithms.
+- Output the predicted class for each test sample.
+- At the end, compute classification accuracy using the provided labels.
 
 Training dataset:
 

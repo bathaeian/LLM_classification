@@ -1,0 +1,38 @@
+Experiment: B vs C classification
+
+Dataset:
+PMF_OMNIGLOT
+
+Classes:
+B, C
+
+Training samples:
+40
+
+Testing samples:
+10
+
+Representation:
+Point cloud (x,y coordinates)
+
+Max points per sample:
+80
+
+Model:
+DeepSeek
+
+Prompt-based classification result:
+
+Sample 1: B
+Sample 2: C
+Sample 3: B
+Sample 4: C
+Sample 5: B
+Sample 6: C
+Sample 7: B
+Sample 8: C
+Sample 9: B
+Sample 10: C
+
+Accuracy:
+10/10 = 100%

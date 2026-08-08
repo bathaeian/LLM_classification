@@ -1,0 +1,27 @@
+You are a machine learning researcher.
+
+Analyze the following labeled training dataset.
+
+Each sample represents one handwritten character.
+
+Each sample contains:
+- image width
+- image height
+- the coordinates of all black pixels
+- the class label
+
+Your tasks are:
+
+1. Propose a decision tree.
+2. Explain the decision rules.
+3. Apply the classifier to the held-out test datasets.
+4. Report the test predictions and test accuracy if labels are provided.
+5. Do not use Python code.
+
+Training dataset:
+
+{train0.json}
+
+Test dataset:
+
+{test0rettulc0.json, test4sehctap0.json, test0noiteled0.json, test0redrob0.json }

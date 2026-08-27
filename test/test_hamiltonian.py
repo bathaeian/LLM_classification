@@ -181,3 +181,11 @@ def test_grid_graph_contains_all_eight_directions():
     }
 
     assert graph[center] == expected_neighbors
+    
+def test_hamiltonian_path_on_different_grid_sizes():
+    for rows, cols in [(1, 1), (1, 2), (2, 2), (2, 3), (3, 3), (3, 4)]:
+        graph = build_grid_graph(rows, cols)
+
+        path = longest_hamiltonian_path(graph)
+
+        assert is_valid_path(graph, path)

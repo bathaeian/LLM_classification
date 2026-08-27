@@ -163,3 +163,21 @@ def test_hamiltonian_path_uses_every_vertex_exactly_once():
     assert is_valid_path(graph, path)
     assert len(path) == len(graph)
     assert len(set(path)) == len(graph)
+    
+def test_grid_graph_contains_all_eight_directions():
+    graph = build_grid_graph(3, 3)
+
+    center = (1, 1)
+
+    expected_neighbors = {
+        (0, 0),  # upper-left
+        (0, 1),  # up
+        (0, 2),  # upper-right
+        (1, 0),  # left
+        (1, 2),  # right
+        (2, 0),  # lower-left
+        (2, 1),  # down
+        (2, 2),  # lower-right
+    }
+
+    assert graph[center] == expected_neighbors

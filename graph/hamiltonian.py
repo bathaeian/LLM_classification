@@ -72,4 +72,38 @@ def longest_hamiltonian_path(graph: Graph) -> list[Node] | None:
         A Hamiltonian path containing every vertex exactly once,
         or None if no Hamiltonian path exists.
     """
-    raise NotImplementedError
+    if not graph:
+        return []
+
+    nodes = list(graph)
+    total_nodes = len(nodes)
+
+    def dfs(node: Node, path: list[Node], visited: set[Node]) -> list[Node] | None:
+        if len(path) == total_nodes:
+            return path.copy()
+
+        for neighbor in graph[node]:
+            if neighbor in visited:
+                continue
+
+            visited.add(neighbor)
+            path.append(neighbor)
+
+            result = dfs(neighbor, path, visited)
+            if result is not None:
+                return result
+
+            path.pop()
+            visited.remove(neighbor)
+
+        return None
+
+    for start in nodes:
+        visited = {start}
+        path = [start]
+
+        result = dfs(start, path, visited)
+        if result is not None:
+            return result
+
+    return None

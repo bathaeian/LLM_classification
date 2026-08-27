@@ -1,4 +1,5 @@
 from graph.hamiltonian import build_grid_graph
+from graph.hamiltonian import longest_hamiltonian_path
 
 
 def test_single_cell():
@@ -66,3 +67,55 @@ def test_invalid_dimensions():
         assert False
     except ValueError:
         pass
+
+def is_valid_path(graph, path):
+    if path is None:
+        return False
+
+    if len(path) != len(graph):
+        return False
+
+    if len(set(path)) != len(path):
+        return False
+
+    for current, next_node in zip(path, path[1:]):
+        if next_node not in graph[current]:
+            return False
+
+    return True
+
+
+def test_finds_hamiltonian_path_in_3x3_grid():
+    graph = build_grid_graph(3, 3)
+
+    path = longest_hamiltonian_path(graph)
+
+    assert is_valid_path(graph, path)
+
+
+def test_finds_hamiltonian_path_in_2x3_grid():
+    graph = build_grid_graph(2, 3)
+
+    path = longest_hamiltonian_path(graph)
+
+    assert is_valid_path(graph, path)
+
+
+def test_diagonal_edges_are_allowed_in_hamiltonian_path():
+    graph = build_grid_graph(2, 2)
+
+    path = longest_hamiltonian_path(graph)
+
+    assert is_valid_path(graph, path)
+
+    diagonal_edges = {
+        ((0, 0), (1, 1)),
+        ((1, 1), (0, 0)),
+        ((0, 1), (1, 0)),
+        ((1, 0), (0, 1)),
+    }
+
+    assert any(
+        (current, next_node) in diagonal_edges
+        for current, next_node in zip(path, path[1:])
+    )

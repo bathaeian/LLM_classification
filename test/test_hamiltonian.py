@@ -119,3 +119,47 @@ def test_diagonal_edges_are_allowed_in_hamiltonian_path():
         (current, next_node) in diagonal_edges
         for current, next_node in zip(path, path[1:])
     )
+    
+def test_empty_graph():
+    graph = {}
+
+    path = longest_hamiltonian_path(graph)
+
+    assert path == []
+
+
+def test_single_vertex_graph():
+    graph = {
+        "A": set()
+    }
+
+    path = longest_hamiltonian_path(graph)
+
+    assert path == ["A"]
+
+
+def test_graph_without_hamiltonian_path():
+    graph = {
+        "A": {"B"},
+        "B": {"A"},
+        "C": set(),
+    }
+
+    path = longest_hamiltonian_path(graph)
+
+    assert path is None
+
+
+def test_hamiltonian_path_uses_every_vertex_exactly_once():
+    graph = {
+        "A": {"B", "C"},
+        "B": {"A", "C", "D"},
+        "C": {"A", "B", "D"},
+        "D": {"B", "C"},
+    }
+
+    path = longest_hamiltonian_path(graph)
+
+    assert is_valid_path(graph, path)
+    assert len(path) == len(graph)
+    assert len(set(path)) == len(graph)

@@ -1,86 +1,66 @@
 from typing import Hashable
 
-
 Node = Hashable
 Graph = dict[Node, set[Node]]
 
-
-DIRECTIONS = (
-    (-1, -1),
-    (-1, 0),
-    (-1, 1),
-    (0, -1),
-    (0, 1),
-    (1, -1),
-    (1, 0),
-    (1, 1),
-)
-
-
-def build_grid_graph(rows: int, cols: int) -> Graph:
+def build_point_cloud_graph(points: list[Node]) -> Graph:
     """
-    Build an 8-neighbor grid graph.
+    Build a graph from a point cloud.
 
-    Each cell is connected to all valid neighboring cells in the
-    four cardinal and four diagonal directions.
+    Two points are connected if they are at most one grid step
+    apart in both coordinates, excluding the point itself.
 
-    Args:
-        rows: Number of rows in the grid.
-        cols: Number of columns in the grid.
-
-    Returns:
-        An adjacency-list representation of the grid graph.
-
-    Raises:
-        ValueError: If rows or cols is not positive.
+    This includes the four cardinal and four diagonal directions.
     """
-    if rows <= 0 or cols <= 0:
-        raise ValueError("rows and cols must be positive")
+    graph: Graph = {point: set() for point in points}
 
-    graph: Graph = {}
+    for point in points:
+        x, y = point
 
-    for row in range(rows):
-        for col in range(cols):
-            node = (row, col)
-            graph[node] = set()
+        for other in points:
+            if point == other:
+                continue
 
-            for row_offset, col_offset in DIRECTIONS:
-                neighbor_row = row + row_offset
-                neighbor_col = col + col_offset
+            other_x, other_y = other
 
-                if (
-                    0 <= neighbor_row < rows
-                    and 0 <= neighbor_col < cols
-                ):
-                    graph[node].add((neighbor_row, neighbor_col))
+            if (
+                abs(x - other_x) <= 1
+                and abs(y - other_y) <= 1
+            ):
+                graph[point].add(other)
 
     return graph
 
 
-def longest_hamiltonian_path(graph: Graph) -> list[Node] | None:
+def find_longest_simple_path(graph: Graph) -> list[Node]:
     """
-    Find a Hamiltonian path in the given graph.
+    Find the longest simple path in the graph.
 
-    A Hamiltonian path visits every vertex exactly once.
+    A simple path visits each vertex at most once.
+    Unlike a Hamiltonian path, it does not have to visit
+    every vertex in the graph.
 
     Args:
         graph: An adjacency-list representation of the graph.
-               Each key is a vertex and its value is the set of
-               adjacent vertices.
 
     Returns:
-        A Hamiltonian path containing every vertex exactly once,
-        or None if no Hamiltonian path exists.
+        A longest simple path. If the graph is empty, returns [].
     """
     if not graph:
         return []
 
     nodes = list(graph)
-    total_nodes = len(nodes)
+    longest_path: list[Node] = []
 
-    def dfs(node: Node, path: list[Node], visited: set[Node]) -> list[Node] | None:
-        if len(path) == total_nodes:
-            return path.copy()
+    def dfs(
+        node: Node,
+        path: list[Node],
+        visited: set[Node],
+    ) -> None:
+        nonlocal longest_path
+
+        if len(path) > len(longest_path):
+            longest_path = path.copy()
 
         for neighbor in graph[node]:
             if neighbor in visited:
@@ -89,21 +69,12 @@ def longest_hamiltonian_path(graph: Graph) -> list[Node] | None:
             visited.add(neighbor)
             path.append(neighbor)
 
-            result = dfs(neighbor, path, visited)
-            if result is not None:
-                return result
+            dfs(neighbor, path, visited)
 
             path.pop()
             visited.remove(neighbor)
 
-        return None
-
     for start in nodes:
-        visited = {start}
-        path = [start]
+        dfs(start, [start], {start})
 
-        result = dfs(start, path, visited)
-        if result is not None:
-            return result
-
-    return None
+    return longest_path

@@ -1,78 +1,9 @@
-from graph.hamiltonian import build_grid_graph
-from graph.hamiltonian import longest_hamiltonian_path
+from graph.hamiltonian import build_point_cloud_graph
+from graph.hamiltonian import find_longest_simple_path
 
 
-def test_single_cell():
-    graph = build_grid_graph(1, 1)
-
-    assert graph == {
-        (0, 0): set(),
-    }
-
-
-def test_two_by_two_has_diagonal_edges():
-    graph = build_grid_graph(2, 2)
-
-    assert graph[(0, 0)] == {
-        (0, 1),
-        (1, 0),
-        (1, 1),
-    }
-
-    assert graph[(1, 1)] == {
-        (0, 0),
-        (0, 1),
-        (1, 0),
-    }
-
-
-def test_all_eight_directions():
-    graph = build_grid_graph(3, 3)
-
-    center = (1, 1)
-
-    expected_neighbors = {
-        (0, 0), (0, 1), (0, 2),
-        (1, 0),         (1, 2),
-        (2, 0), (2, 1), (2, 2),
-    }
-
-    assert graph[center] == expected_neighbors
-
-
-def test_corner_has_three_neighbors():
-    graph = build_grid_graph(3, 3)
-
-    assert len(graph[(0, 0)]) == 3
-    assert len(graph[(0, 2)]) == 3
-    assert len(graph[(2, 0)]) == 3
-    assert len(graph[(2, 2)]) == 3
-
-
-def test_center_has_eight_neighbors():
-    graph = build_grid_graph(3, 3)
-
-    assert len(graph[(1, 1)]) == 8
-
-
-def test_invalid_dimensions():
-    try:
-        build_grid_graph(0, 3)
-        assert False
-    except ValueError:
-        pass
-
-    try:
-        build_grid_graph(3, 0)
-        assert False
-    except ValueError:
-        pass
-
-def is_valid_path(graph, path):
+def is_valid_simple_path(graph, path):
     if path is None:
-        return False
-
-    if len(path) != len(graph):
         return False
 
     if len(set(path)) != len(path):
@@ -85,107 +16,175 @@ def is_valid_path(graph, path):
     return True
 
 
-def test_finds_hamiltonian_path_in_3x3_grid():
-    graph = build_grid_graph(3, 3)
+def test_empty_point_cloud():
+    graph = build_point_cloud_graph([])
 
-    path = longest_hamiltonian_path(graph)
-
-    assert is_valid_path(graph, path)
-
-
-def test_finds_hamiltonian_path_in_2x3_grid():
-    graph = build_grid_graph(2, 3)
-
-    path = longest_hamiltonian_path(graph)
-
-    assert is_valid_path(graph, path)
+    assert graph == {}
+    assert find_longest_simple_path(graph) == []
 
 
-def test_diagonal_edges_are_allowed_in_hamiltonian_path():
-    graph = build_grid_graph(2, 2)
+def test_single_point():
+    points = [(0, 0)]
 
-    path = longest_hamiltonian_path(graph)
+    graph = build_point_cloud_graph(points)
 
-    assert is_valid_path(graph, path)
+    assert graph == {(0, 0): set()}
+    assert find_longest_simple_path(graph) == [(0, 0)]
 
-    diagonal_edges = {
-        ((0, 0), (1, 1)),
-        ((1, 1), (0, 0)),
-        ((0, 1), (1, 0)),
-        ((1, 0), (0, 1)),
+
+def test_cardinal_and_diagonal_neighbors():
+    points = [
+        (0, 0),
+        (0, 1),
+        (1, 0),
+        (1, 1),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    assert graph[(0, 0)] == {
+        (0, 1),
+        (1, 0),
+        (1, 1),
     }
 
-    assert any(
-        (current, next_node) in diagonal_edges
-        for current, next_node in zip(path, path[1:])
-    )
-    
-def test_empty_graph():
-    graph = {}
 
-    path = longest_hamiltonian_path(graph)
+def test_points_with_gap_are_not_neighbors():
+    points = [
+        (0, 0),
+        (0, 2),
+        (2, 0),
+        (2, 2),
+    ]
 
-    assert path == []
+    graph = build_point_cloud_graph(points)
 
-
-def test_single_vertex_graph():
-    graph = {
-        "A": set()
-    }
-
-    path = longest_hamiltonian_path(graph)
-
-    assert path == ["A"]
+    for point in points:
+        assert graph[point] == set()
 
 
-def test_graph_without_hamiltonian_path():
+def test_diagonal_neighbors_are_allowed():
+    points = [
+        (0, 0),
+        (1, 1),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    assert graph[(0, 0)] == {(1, 1)}
+    assert graph[(1, 1)] == {(0, 0)}
+
+
+def test_non_neighboring_points_are_not_connected():
+    points = [
+        (0, 0),
+        (1, 2),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    assert graph[(0, 0)] == set()
+    assert graph[(1, 2)] == set()
+
+
+def test_missing_points_break_the_connection():
+    points = [
+        (0, 0),
+        (0, 2),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    assert graph[(0, 0)] == set()
+    assert graph[(0, 2)] == set()
+
+
+def test_finds_longest_path_in_connected_point_cloud():
+    points = [
+        (0, 0),
+        (0, 1),
+        (1, 1),
+        (2, 1),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    path = find_longest_simple_path(graph)
+
+    assert is_valid_simple_path(graph, path)
+    assert len(path) == 4
+
+
+def test_finds_path_using_diagonal_edges():
+    points = [
+        (0, 0),
+        (1, 1),
+        (2, 2),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    path = find_longest_simple_path(graph)
+
+    assert is_valid_simple_path(graph, path)
+    assert len(path) == 3
+
+
+def test_disconnected_point_cloud():
+    points = [
+        (0, 0),
+        (0, 1),
+        (5, 5),
+    ]
+
+    graph = build_point_cloud_graph(points)
+
+    path = find_longest_simple_path(graph)
+
+    assert is_valid_simple_path(graph, path)
+    assert len(path) == 2
+
+
+def test_longest_path_does_not_need_to_use_all_vertices():
     graph = {
         "A": {"B"},
-        "B": {"A"},
-        "C": set(),
+        "B": {"A", "C"},
+        "C": {"B"},
+        "D": set(),
     }
 
-    path = longest_hamiltonian_path(graph)
+    path = find_longest_simple_path(graph)
 
-    assert path is None
+    assert is_valid_simple_path(graph, path)
+    assert len(path) == 3
+    assert set(path) == {"A", "B", "C"}
 
 
-def test_hamiltonian_path_uses_every_vertex_exactly_once():
+def test_longest_path_in_star_graph():
     graph = {
-        "A": {"B", "C"},
-        "B": {"A", "C", "D"},
-        "C": {"A", "B", "D"},
-        "D": {"B", "C"},
+        "A": {"B", "C", "D"},
+        "B": {"A"},
+        "C": {"A"},
+        "D": {"A"},
     }
 
-    path = longest_hamiltonian_path(graph)
+    path = find_longest_simple_path(graph)
 
-    assert is_valid_path(graph, path)
-    assert len(path) == len(graph)
-    assert len(set(path)) == len(graph)
-    
-def test_grid_graph_contains_all_eight_directions():
-    graph = build_grid_graph(3, 3)
+    assert is_valid_simple_path(graph, path)
+    assert len(path) == 3
+    assert "A" in path
 
-    center = (1, 1)
 
-    expected_neighbors = {
-        (0, 0),  # upper-left
-        (0, 1),  # up
-        (0, 2),  # upper-right
-        (1, 0),  # left
-        (1, 2),  # right
-        (2, 0),  # lower-left
-        (2, 1),  # down
-        (2, 2),  # lower-right
+def test_hamiltonian_path_is_found_when_all_vertices_are_connected():
+    graph = {
+        "A": {"B"},
+        "B": {"A", "C"},
+        "C": {"B", "D"},
+        "D": {"C"},
     }
 
-    assert graph[center] == expected_neighbors
-    
-def test_hamiltonian_path_on_different_grid_sizes():
-    for rows, cols in [(1, 1), (1, 2), (2, 2), (2, 3), (3, 3), (3, 4)]:
-        graph = build_grid_graph(rows, cols)
+    path = find_longest_simple_path(graph)
 
-        path = longest_hamiltonian_path(graph)
-
-        assert is_valid_path(graph, path)
+    assert is_valid_simple_path(graph, path)
+    assert len(path) == 4
+    assert set(path) == {"A", "B", "C", "D"}

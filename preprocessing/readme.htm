@@ -1,0 +1,20 @@
+<OL>
+  <LI>
+    Download OMNIGLOT dataset from this site
+<br>
+https://github.com/pengsuhua/PMF_OMNIGLOT/tree/main/data
+  </LI>
+  <LI>
+    extract data
+  </LI>
+  <LI>
+    Enter this command
+    <br>
+    python image_to_pointcloud_small.py --input "./PMF_OMNIGLOT-main/PMF_OMNIGLOT-main/data/train" --output "./data/train/small20/" --resize 20                         
+  </LI>
+  <LI>
+    Enter this command
+    <br>
+python export_dataset3.py --input "./data/teain/small20/0/" --output "./data/train/small20/pointcloud0.json"
+  </LI>
+</OL>

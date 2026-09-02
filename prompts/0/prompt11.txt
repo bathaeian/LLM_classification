@@ -1,0 +1,19 @@
+Let the following definitions connect a point on a grid graph to another point:
+ (N=(x,y)->(x,y-1)) or ((x,y-2))
+ (S=(x,y)->(x,y+1)) or ((x,y+2))
+ (E=(x,y)->(x+1,y)) or ((x+2,y)) (W=(x,y)->(x-1,y)) or ((x-2,y))
+ (A=(x,y)->(x-1,y-1),(x-2,y-2),(x-1,y-2),(x-2,y-1))
+ (B=(x,y)->(x+1,y-1),(x+2,y-2),(x+1,y-2),(x+2,y-1))
+ (C=(x,y)->(x+1,y+1),(x+2,y+2),(x+1,y+2),(x+2,y+1))
+ (D=(x,y)->(x-1,y+1),(x-2,y+2),(x-1,y+2),(x-2,y+1))
+Assume the POINT_CLOUD is:
+VARIABLE_DECLARATION: POINT_CLOUD= [(7, 4), (8, 4), (9, 4), (6, 5), (10, 5), (11, 5), (5, 6), (12, 6), (5, 7), (13, 7), (6, 8), (13, 8), (13, 9), (7, 10), (8, 10), (9, 10), (10, 10), (11, 10), (12, 10), (6, 11), (7, 12), (8, 12), (9, 12), (10, 12), (11, 12), (12, 12), (13, 12)]
+VARIABLE_DECLARATION: LONGEST_SIMPLE_PATH=""
+For each point int the POINT_CLOUD find the longest simple path that starts from that point. If its length is greater than the length of variable LONGEST_SIMPLE_PATH then store its value in the variable LONGEST_SIMPLE_PATH
+Assume the following trajectory descriptors, where (X^*) denotes an arbitrary number of repetitions of (X):
+VARIABLE_DECLARATION: TRAJECTORY_DESCRIPTORS= [(P_1=CC^*SS^*D^*WW^*AA^*B^*N^*EE^*C^*D^*S^*),(P_2=SS^*DD^*WW^*ANN^*A),(P_3=CC^*SSSSSS^*CC^*EEE^*BB^*NN^*A^*),
+                                               (P_4=NN^*EESS^*DWW^*DD^*SCE),(P_5=ENN^*AA^*W^*DD^*SS^*CC^*EE^*BB^*NN^*AA^*W),
+                                               (P_6=EC^*SS^*DD^*W^*AA^*NN^*BB^*CC^*S^*DD^*WW^*D^*SS^*CC^*EEEEE^*),(P_7=EE^*C^*SS^*DD^*WW^*AA^*NN^*B^*),
+					       (P_8=WW^*DD^*SS^*C^*EE^*NN^*AA^*W^*D),(P_9= A^*W^*D^*S^*C^*E^*SS^*D^*W^*DDDDDDD^*),(P_10=BB^*NN^*EEEEE^*D^*SS^*)]
+For each trajectory descriptor in the TRAJECTORY_DESCRIPTORS define a trajectory expert that performs global sequence alignment between its trajectory descriptor and variable LONGEST_SIMPLE_PATH with gap penalty -1. 
+Finally, determine the trajectory expert with the highest score.
